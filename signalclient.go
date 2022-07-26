@@ -47,6 +47,8 @@ func NewSignalClient() *SignalClient {
 }
 
 func (c *SignalClient) Start() {
+	logger.Info("signalclient.go Start")
+
 	if c.isStarted.Swap(true) {
 		return
 	}
@@ -58,6 +60,8 @@ func (c *SignalClient) IsStarted() bool {
 }
 
 func (c *SignalClient) Join(urlPrefix string, token string, params *ConnectParams) (*livekit.JoinResponse, error) {
+	logger.Info("signalclient.go Join", "url", urlPrefix, "token", token)
+
 	if urlPrefix == "" {
 		return nil, ErrURLNotProvided
 	}
@@ -101,6 +105,8 @@ func (c *SignalClient) Join(urlPrefix string, token string, params *ConnectParam
 }
 
 func (c *SignalClient) Close() {
+	logger.Info("signalclient.go Close")
+
 	if c.isClosed.Swap(true) {
 		return
 	}
@@ -110,6 +116,8 @@ func (c *SignalClient) Close() {
 }
 
 func (c *SignalClient) SendICECandidate(candidate webrtc.ICECandidateInit, target livekit.SignalTarget) error {
+	logger.Info("signalclient.go SendICECandidate")
+
 	return c.SendRequest(&livekit.SignalRequest{
 		Message: &livekit.SignalRequest_Trickle{
 			Trickle: ToProtoTrickle(candidate, target),
@@ -153,6 +161,8 @@ func (c *SignalClient) SendSyncState(state *livekit.SyncState) error {
 }
 
 func (c *SignalClient) SendLeave() error {
+	logger.Info("signalclient.go SendLeave")
+
 	return c.SendRequest(&livekit.SignalRequest{
 		Message: &livekit.SignalRequest_Leave{
 			Leave: &livekit.LeaveRequest{},

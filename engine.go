@@ -65,6 +65,7 @@ func NewRTCEngine() *RTCEngine {
 }
 
 func (e *RTCEngine) Join(url string, token string, params *ConnectParams) (*livekit.JoinResponse, error) {
+	logger.Info("engine.go Join", "url", url, "token", token)
 	res, err := e.client.Join(url, token, params)
 	if err != nil {
 		return nil, err
@@ -92,6 +93,7 @@ func (e *RTCEngine) Join(url string, token string, params *ConnectParams) (*live
 }
 
 func (e *RTCEngine) Close() {
+	logger.Info("engine.go Close")
 	if !e.closed.CAS(false, true) {
 		return
 	}
@@ -336,6 +338,8 @@ func (e *RTCEngine) readDataPacket(msg webrtc.DataChannelMessage) (*livekit.Data
 }
 
 func (e *RTCEngine) handleDisconnect() {
+	logger.Info("engine.go handleDisconnect")
+
 	if e.closed.Load() {
 		return
 	}
@@ -388,6 +392,8 @@ func (e *RTCEngine) handleDisconnect() {
 }
 
 func (e *RTCEngine) resumeConnection() error {
+	logger.Info("engine.go resumeConnection")
+
 	_, err := e.client.Join(e.url, e.token.Load(), &ConnectParams{Reconnect: true})
 	if err != nil {
 		return err
@@ -413,6 +419,8 @@ func (e *RTCEngine) resumeConnection() error {
 }
 
 func (e *RTCEngine) restartConnection() error {
+	logger.Info("engine.go restartConnection")
+
 	if e.client.IsStarted() {
 		e.client.SendLeave()
 	}

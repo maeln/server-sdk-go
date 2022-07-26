@@ -142,6 +142,7 @@ func (p *baseParticipant) setIsSpeaking(speaking bool) {
 }
 
 func (p *baseParticipant) setConnectionQualityInfo(info *livekit.ConnectionQualityInfo) {
+	logger.Info("setConnectionQualityInfo", "participant", p.identity, "quality", info.Quality)
 	p.lock.Lock()
 	p.connectionQuality = info
 	p.lock.Unlock()

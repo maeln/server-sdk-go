@@ -63,6 +63,7 @@ type Room struct {
 
 // CreateRoom can be used to update callbacks before calling Join
 func CreateRoom(callback *RoomCallback) *Room {
+	logger.Info("room.go CreateRoom")
 	engine := NewRTCEngine()
 	r := &Room{
 		engine:       engine,
@@ -93,6 +94,7 @@ func CreateRoom(callback *RoomCallback) *Room {
 
 // ConnectToRoom creates and joins the room
 func ConnectToRoom(url string, info ConnectInfo, callback *RoomCallback, opts ...ConnectOption) (*Room, error) {
+	logger.Info("room.go ConnectToRoom", "url", url, "room_name", info.RoomName, "participant", info.ParticipantIdentity)
 	room := CreateRoom(callback)
 	err := room.Join(url, info, opts...)
 	if err != nil {
@@ -103,6 +105,7 @@ func ConnectToRoom(url string, info ConnectInfo, callback *RoomCallback, opts ..
 
 // ConnectToRoomWithToken creates and joins the room
 func ConnectToRoomWithToken(url, token string, callback *RoomCallback, opts ...ConnectOption) (*Room, error) {
+	logger.Info("room.go ConnectToRoomWithToken", "url", url, "token", token)
 	room := CreateRoom(callback)
 	err := room.JoinWithToken(url, token, opts...)
 	if err != nil {
@@ -125,6 +128,7 @@ func (r *Room) SID() string {
 
 // Join should only be used with CreateRoom
 func (r *Room) Join(url string, info ConnectInfo, opts ...ConnectOption) error {
+	logger.Info("room.go Join", "url", url, "room_name", info.RoomName, "participant", info.ParticipantIdentity)
 	var params ConnectParams
 	for _, opt := range opts {
 		opt(&params)
@@ -155,6 +159,7 @@ func (r *Room) Join(url string, info ConnectInfo, opts ...ConnectOption) error {
 
 // JoinWithToken should only be used with CreateRoom
 func (r *Room) JoinWithToken(url, token string, opts ...ConnectOption) error {
+	logger.Info("room.go JoinWithToken", "url", url, "token", token)
 	params := &ConnectParams{
 		AutoSubscribe: true,
 	}
